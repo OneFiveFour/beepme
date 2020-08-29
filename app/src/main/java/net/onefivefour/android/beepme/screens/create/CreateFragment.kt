@@ -5,10 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.android.synthetic.main.fragment_create.*
+import net.onefivefour.android.beepme.AlarmWorker
 import net.onefivefour.android.beepme.R
 import net.onefivefour.android.beepme.notifications.Creator
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.concurrent.TimeUnit
 
 class CreateFragment : Fragment() {
 
@@ -26,8 +30,12 @@ class CreateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btn_create_notification.setOnClickListener { 
-            creator.send(requireContext())
+        btn_create_notification.setOnClickListener {
+            val saveRequest = PeriodicWorkRequestBuilder<AlarmWorker>(15, TimeUnit.MINUTES)
+                    // Additional configuration
+                    .build()
+            
+            WorkManager.getInstance(requireContext()).enqueue(saveRequest)
         }
     }
 
