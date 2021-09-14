@@ -1,5 +1,6 @@
 package net.onefivefour.android.beepme
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import net.onefivefour.android.beepme.screens.create.CreateFragment
@@ -16,5 +17,10 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.container, CreateFragment.newInstance())
                     .commitNow()
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Timber.d("+++ ON NEW INTENT")
     }
 }

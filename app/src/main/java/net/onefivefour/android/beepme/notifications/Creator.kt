@@ -6,23 +6,28 @@ import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
 import net.onefivefour.android.beepme.MainActivity
+import net.onefivefour.android.beepme.screens.create.NotificationReceiver
 import timber.log.Timber
 
-class Creator {
+object Creator {
 
     fun send(context: Context) {
 
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
-        val alarmIntent = Intent(context, MainActivity::class.java).let { intent ->
-            PendingIntent.getBroadcast(context, 0, intent, 0)
-        }
-        
-        Timber.d("+++ SET ALARM")
+        // Init the Alarm Manager.
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        alarmManager?.set(
-            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + 30 * 1000,
-            alarmIntent
+        // Setting the PendingIntent to be fired when alarm triggers.
+        val serviceIntent = Intent(context.applicationContext, NotificationReceiver::class.java)
+        val pendingServiceIntent = PendingIntent.getBroadcast(context, 0, serviceIntent, 0)
+
+        // Set the alarm for the next seconds.  
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis() + 5000,
+            pendingServiceIntent
         )
+        
+        Timber.d("+++ ALARM SET")
+        
     }
 }
