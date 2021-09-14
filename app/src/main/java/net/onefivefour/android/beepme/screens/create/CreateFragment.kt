@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import net.onefivefour.android.beepme.databinding.FragmentCreateBinding
-import net.onefivefour.android.beepme.notifications.Creator
+import net.onefivefour.android.beepme.notifications.AlarmUtil
 
 class CreateFragment : Fragment() {
     
@@ -23,10 +23,20 @@ class CreateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
         binding.btnCreateNotification.setOnClickListener {
-            Creator.send(requireContext())
+            AlarmUtil.send(requireContext())
+        }
+        
+        binding.btnCancelAlarm.setOnClickListener { 
+            AlarmUtil.cancel(requireContext())
         }
     }
 
+
+    override fun onStop() {
+        super.onStop()
+//        AlarmUtil.cancel(requireContext())
+    }
 
 }
